@@ -19,12 +19,13 @@ Project is created with:
 * HTML, CSS, Javascript
 	
 ## Setup
-To run this project, install it locally by cloning this repository using either the web url:
+To run this project, first install it locally by cloning this repository using either the web url:
 
 ```
 $ git clone https://github.com/ZhangDev1/ItunesArtistSearch.git
 ```
 or by using ssh:
 ```
-$ git clone
+$ git clone git@github.com:ZhangDev1/ItunesArtistSearch.git
 ```
+then finding the location where you downloaded the repository and double clicking the "index.html" file.
