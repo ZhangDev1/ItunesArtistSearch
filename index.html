@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+   <title> 493 Artist Search</title>
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"></script>
+   <!--Custom Style-->
+   <link rel="stylesheet" type="text/css" href="index.css">
+   <!--Vue-->
+   <script src="https://unpkg.com/vue@3"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+</head>
+
+<body>
+   <div id='app'>
+      <nav class="navbar navbar-default">
+         <div class="container">
+            <div class="navbar-header">
+               <h3>493 Artist Search</h3>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="row searchbar">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+               <h4>Enter the name of the artist and press enter: </h4>
+               <input type="text" v-model="text" v-on:keyup.enter="readSearchBox">
+            </div>
+         </div>
+
+         <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4> Search Result (Total {{ filteredResult.length }} Found.) </h4>
+            <div v-if="searchResult.length>0">
+               <button v-if="!checkToggleConditions()" v-on:click="changeToggles()" class="btn btn-success">ALL</button>
+               <button v-else v-on:click="changeToggles()" class="btn btn-default">ALL</button>
+               <template v-for="[genre, toggle] in genres">
+                  <button v-if="toggle" v-on:click="filterResults(genre)" type="button" class="btn btn-primary"> {{ genre }} </button>
+                  <button v-else v-on:click="filterResults(genre)" type="button" class="btn btn-default"> {{ genre }} </button>
+               </template>
+               <!-- <button v-if="!electronicToggle" v-on:click="filterResults(0)" type="button" class="btn btn-default">Electronic</button>
+               <button v-else v-on:click="filterResults(0)" type="button" class="btn btn-primary">Electronic</button>
+               <button v-if="!danceToggle" v-on:click="filterResults(1)" type="button" class="btn btn-default">Dance</button>
+               <button v-else v-on:click="filterResults(1)" type="button" class="btn btn-primary">Dance</button>
+               <button v-if="!popToggle" v-on:click="filterResults(2)" type="button" class="btn btn-default">Pop</button>
+               <button v-else v-on:click="filterResults(2)" type="button" class="btn btn-primary">Pop</button> -->
+            </div>
+            <h4>
+               List of results
+            </h4>
+            <div>
+               <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Sort list of results by:
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li :class="{ active: sortFlag==0 }" class="list-group-item"><a v-on:click="sortList(0)" href="#">Reset to original</a></li>
+                    <li :class="{ active: sortFlag==1 }" class="list-group-item"><a v-on:click="sortList(1)" href="#">Collection Name</a></li>
+                    <li :class="{ active: sortFlag==2 }" class="list-group-item"><a v-on:click="sortList(2)" href="#">Price</a></li>
+                  </ul>
+                  <button v-on:click="displayTracks" class="btn btn-primary" type="button" data-toggle="modal" data-target="#trackModal">Display Tracks</button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="trackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                     <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Tracks by Collection Name</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                              </button>
+                           </div>
+                           <div v-if="filteredResult.length>0" class="modal-body">
+                              <template v-for="[collectionName, list] in allCollectionNames" :key="collectionName">
+                                 <p><b>{{ collectionName }}:</b></p>
+                                 <template v-for="trackName in list">
+                                    <pre><p>{{ trackName }} </p></pre>
+                                 </template>
+                              </template>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div>
+            <div v-for="(artist, index) in filteredResult" :key="index" class='col-lg-6 col-md-6 col-sm-6 artist' v-bind:id="'description'+index">
+               <div class='artist-albumcover col-sm-4'>
+                  <img v-bind:src="artist.artworkUrl100">
+               </div>
+
+               <div class='artist-info col-sm-6'>
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a data-toggle="tab" v-bind:href="'#description'+index" v-on:click="descToggle(index, true)">Description</a></li>
+                     <li><a data-toggle="tab" v-bind:href="'#description'+index" v-on:click="descToggle(index, false)">Track info</a></li>
+                  </ul>
+                  <div class="tab-content">
+                     <div v-if="descriptionToggle[index]" id="descriptionTab">
+                        <p><b>Artist Name: </b> {{ artist.artistName }}</p>
+                        <p><b>Track Name: </b> {{ artist.trackName }}</p>
+                        <p><b>Collection Name: </b> {{ artist.collectionName }}</p>
+                        <p v-if="artist.collectionPrice"><b>Price: </b> {{ artist.collectionPrice }} </p>
+                        <p v-else><b>Price: </b> 0 </p>
+                        <p><b>Kind: </b> {{ artist.kind }}</p>
+                        <p><b>Preview: </b><a v-bind:href="artist.previewUrl">Link</a></p>
+                        <button v-if="musicToggle[index].toggle" v-on:click="playAudio(index, artist.previewUrl)" class="btn btn-default">Play</button>
+                        <button v-else v-on:click="stopAudio(index)" class="btn btn-default">Stop</button>
+                     </div>
+                     <div v-else id="trackInfoTab">
+                        <p><b>Track Id: </b> {{ artist.trackId }}</p>
+                        <p><b>Country: </b> {{ artist.country }}</p>
+                     </div>
+                  </div>
+               </div>
+            </div> 
+            <!-- <div class='col-lg-6 col-md-6 col-sm-6 artist'>
+               <div class='artist-albumcover col-sm-4'>
+                  <img v-bind:src="artist1">
+               </div>
+
+               <div class='artist-info col-sm-6'>
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a data-toggle="tab">Tab1</a></li>
+                     <li><a data-toggle="tab">Tab2</a></li>
+                  </ul>
+                  <div class="tab-content">
+                  </div>
+               </div>
+            </div>
+
+            <div class='col-lg-6 col-md-6 col-sm-6 artist'>
+               <div class='artist-albumcover col-sm-4'>
+                  <img v-bind:src="artist2">
+               </div>
+
+               <div class='artist-info col-sm-6'>
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a data-toggle="tab">Tab1</a></li>
+                     <li><a data-toggle="tab">Tab2</a></li>
+                  </ul>
+                  <div class="tab-content">
+                  </div>
+               </div>
+            </div> -->
+         </div>
+      </div>
+   </div>
+   <script src="script.js"></script>
+</body>
+</html>
