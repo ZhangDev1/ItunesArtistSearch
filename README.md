@@ -12,15 +12,15 @@ This project is a simple website that allows the user to search for different me
 	
 ## Technologies
 Project is created with:
-* Lorem version: 12.3
-* Ipsum version: 2.33
-* Ament library version: 999
+* bootstrap version: 3.3.7
+* jQuery version: 3.4.1
+* npm version: 8.19.2
+* vue version: 3.0
+* HTML, CSS, Javascript
 	
 ## Setup
-To run this project, install it locally using npm:
+To run this project, install it locally by cloning this repository using either:
 
 ```
 $ cd ../lorem
-$ npm install
-$ npm start
 ```
