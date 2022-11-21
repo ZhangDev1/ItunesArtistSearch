@@ -19,8 +19,12 @@ Project is created with:
 * HTML, CSS, Javascript
 	
 ## Setup
-To run this project, install it locally by cloning this repository using either:
+To run this project, install it locally by cloning this repository using either the web url:
 
 ```
-$ cd ../lorem
+$ git clone https://github.com/ZhangDev1/ItunesArtistSearch.git
+```
+or by using ssh:
+```
+$ git clone
 ```
