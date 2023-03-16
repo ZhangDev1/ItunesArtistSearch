@@ -112,20 +112,6 @@ createApp({
       }
       this.filteredResult = JSON.parse(JSON.stringify(this.searchResult));
       this.sortList(this.sortFlag);
-      // let found = false;
-      // for (let toggle of this.genres.values()) {
-      //   if (toggle == true) {
-      //     found = true;
-      //   }
-      // }
-      // if (!found) {
-      //   this.filteredResult = this.searchResult;
-      // }
-      // else {
-      //   for (let genre of this.genres.keys()) {
-      //     this.genres.set(genre, false);
-      //   }
-      // }
     },
 
     checkToggleConditions: function() {
