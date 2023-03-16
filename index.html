@@ -46,12 +46,6 @@
                   <button v-if="toggle" v-on:click="filterResults(genre)" type="button" class="btn btn-primary"> {{ genre }} </button>
                   <button v-else v-on:click="filterResults(genre)" type="button" class="btn btn-default"> {{ genre }} </button>
                </template>
-               <!-- <button v-if="!electronicToggle" v-on:click="filterResults(0)" type="button" class="btn btn-default">Electronic</button>
-               <button v-else v-on:click="filterResults(0)" type="button" class="btn btn-primary">Electronic</button>
-               <button v-if="!danceToggle" v-on:click="filterResults(1)" type="button" class="btn btn-default">Dance</button>
-               <button v-else v-on:click="filterResults(1)" type="button" class="btn btn-primary">Dance</button>
-               <button v-if="!popToggle" v-on:click="filterResults(2)" type="button" class="btn btn-default">Pop</button>
-               <button v-else v-on:click="filterResults(2)" type="button" class="btn btn-primary">Pop</button> -->
             </div>
             <h4>
                List of results
@@ -126,35 +120,6 @@
                   </div>
                </div>
             </div> 
-            <!-- <div class='col-lg-6 col-md-6 col-sm-6 artist'>
-               <div class='artist-albumcover col-sm-4'>
-                  <img v-bind:src="artist1">
-               </div>
-
-               <div class='artist-info col-sm-6'>
-                  <ul class="nav nav-tabs">
-                     <li class="active"><a data-toggle="tab">Tab1</a></li>
-                     <li><a data-toggle="tab">Tab2</a></li>
-                  </ul>
-                  <div class="tab-content">
-                  </div>
-               </div>
-            </div>
-
-            <div class='col-lg-6 col-md-6 col-sm-6 artist'>
-               <div class='artist-albumcover col-sm-4'>
-                  <img v-bind:src="artist2">
-               </div>
-
-               <div class='artist-info col-sm-6'>
-                  <ul class="nav nav-tabs">
-                     <li class="active"><a data-toggle="tab">Tab1</a></li>
-                     <li><a data-toggle="tab">Tab2</a></li>
-                  </ul>
-                  <div class="tab-content">
-                  </div>
-               </div>
-            </div> -->
          </div>
       </div>
    </div>
